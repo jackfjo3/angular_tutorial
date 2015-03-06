@@ -18,11 +18,13 @@ describe('PhoneCat App', function() {
       browser.get('app/index.html#/phones');
     });
 
+    var phoneList = element.all(by.repeater('phone in phones'));
+    var query = element(by.model('query'));
+
 
     it('should filter the phone list as a user types into the search box', function() {
 
-      var phoneList = element.all(by.repeater('phone in phones'));
-      var query = element(by.model('query'));
+      
 
       expect(phoneList.count()).toBe(20);
 
@@ -96,6 +98,14 @@ describe('PhoneCat App', function() {
 
       element(by.css('.phone-thumbs li:nth-child(1) img')).click();
       expect(element(by.css('img.phone.active')).getAttribute('src')).toMatch(/img\/phones\/nexus-s.0.jpg/);
+    });
+
+    it('shoul display the current filter in the page title bar', function() {
+      query.clear();
+      expect(browser.getTitle()).toMatch(/Google Phone Gallery/);
+
+      query.sendKeys('nexus');
+      expect(browser.getTitle()).toMatch(/Google Phone Gallery: nexus$/);
     });
   });
 });
